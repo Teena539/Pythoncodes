@@ -1,50 +1,29 @@
 import random
 
-def roll_dice():
-    return random.randint(1, 6)
-
-def simulate_dice_rolls(num_trials):
-    # Store results of dice rolls
-    rolls = [roll_dice() for _ in range(num_trials)]
-    return rolls
-
-def calculate_conditional_probability(rolls, condition_a, condition_b):
-    # Count events satisfying both conditions
-    both_conditions = sum(1 for roll in rolls if condition_a(roll) and condition_b(roll))
-    
-    # Count events satisfying condition B
-    condition_b_count = sum(1 for roll in rolls if condition_b(roll))
-    
-    # Calculate conditional probability: P(A|B) = P(A∩B)/P(B)
-    if condition_b_count == 0:
-        return 0
-    return both_conditions / condition_b_count
-
-def main():
+def calculate_dice_probability():
     # Number of trials
-    num_trials = 10000
+    trials = 1000
+    favorable = 0
     
-    # Simulate dice rolls
-    rolls = simulate_dice_rolls(num_trials)
+    # Let's calculate P(Even | Greater than 3)
+    for _ in range(trials):
+        roll = random.randint(1, 6)
+        
+        # Check if number is greater than 3 (condition)
+        if roll > 3:
+            # Check if number is even (event we're interested in)
+            if roll % 2 == 0:
+                favorable += 1
     
-    # Example 1: P(Even | Greater than 3)
-    is_even = lambda x: x % 2 == 0
-    greater_than_three = lambda x: x > 3
+    # Count total numbers greater than 3
+    total_greater_than_3 = len([x for x in range(4, 7)])  # 4,5,6
+    # Count even numbers greater than 3
+    even_greater_than_3 = len([x for x in range(4, 7) if x % 2 == 0])  # 4,6
     
-    prob_even_given_greater_than_three = calculate_conditional_probability(
-        rolls, is_even, greater_than_three
-    )
+    # Theoretical probability
+    theoretical_prob = even_greater_than_3 / total_greater_than_3
     
-    print(f"Probability of rolling an even number given it's greater than 3: {prob_even_given_greater_than_three:.3f}")
-    
-    # Example 2: P(Greater than 4 | Even)
-    greater_than_four = lambda x: x > 4
-    
-    prob_greater_than_four_given_even = calculate_conditional_probability(
-        rolls, greater_than_four, is_even
-    )
-    
-    print(f"Probability of rolling greater than 4 given it's even: {prob_greater_than_four_given_even:.3f}")
+    print(f"Theoretical Probability: {theoretical_prob}")  # Should be 2/3 ≈ 0.667
 
 if __name__ == "__main__":
-    main()
+    calculate_dice_probability()
