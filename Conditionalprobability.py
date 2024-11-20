@@ -2,7 +2,7 @@ import random
 
 def calculate_dice_probability():
     # Number of trials
-    trials = 1000
+    trials = 100
     favorable = 0
     
     # Let's calculate P(Even | Greater than 3)
